@@ -5,6 +5,7 @@ library(visdat)
 library(plotly)
 library(dplyr)
 
+#MG: I highly suggest copying this all into a RMD so you can run individual cells
 
 #' # Step 1: Formulate your research question 
 # Are some industries more likely to lack race and/or ethnic representation than others? 
@@ -23,7 +24,7 @@ employed <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/t
 
 earn <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-23/earn.csv') 
 
-
+#MG: Very clear how to run and yes it runs!
 
 #' # Step 3: checking package ##### 
 
@@ -91,13 +92,15 @@ employed |>
 ## we will filter out 'women' 'na' 'white" 'Asian", "Black or African American"
 #from industry colmn NOT from race_gender
 
+
+#MG:I would rework these so that the axis are different instead of separate several little visuals
 employed |>
   filter(race_gender %in% c("Women", "Men")) |>
   filter(!(industry %in% c("Women", "NA", "White"))) |>
   ggplot(aes(x = year, y = employ_n, fill = race_gender)) +
   geom_bar(stat = "identity") +
   facet_wrap(vars(industry), scales = 'free_y')
-
+#MG: in both this one and above, the html does not properly display the labels for these visuals
 employed |>
   filter(race_gender %in% c("Asian", "Black or African American", 'White')) |>
   filter(!(industry %in% c("Women", "NA", "White", 'Asian', "Black or African American"))) |>
@@ -124,4 +127,6 @@ employed %>%
   arrange(desc(share)) |> 
   mutate(share = scales::percent(share, accuracy = 1))  
 
-
+#MG:How easy or difficult is it to read the script and understand what the author is 
+#doing and why?: It's not difficult the comments are very clear, maybe just working on the graphs to be easier to view and understand
+# The html is reproducible; consider adjusting the plot size or layout to ensure they are fully visible.
