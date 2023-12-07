@@ -1,24 +1,27 @@
 library(tidyverse)
-library(lubridate)
+## DH: lubridate and dplyr loaded as part of tidyverse suite
 library(skimr)
 library(visdat)
-library(plotly)
-library(dplyr)
+# library(plotly) ## DH: Seems like you don't use this
 
 
 #' # Step 1: Formulate your research question 
+## DH: Note that the next line shows up as a code chunk rather than regular text
 # Are some industries more likely to lack race and/or ethnic representation than others? 
 
 #' # Step 2: Get the Data/read in your data
 #' 
+## DH: Note that Markdown needs a blank line to recognize a paragraph break.  Add that, or better yet make this an itemized list. 
 #'  Read in with tidytuesdayR package 
 #'  Install from CRAN via: install.packages("tidytuesdayR")
+## DH: Missing code? 
 #' This loads the readme and all the datasets for the week of interest
 
 
-
+## DH: Again, this shows up as a comment in a code block rather than text
 # Or read in the data manually
-
+## DH: This approach means that your script will only run when there's an internet connection.  Suboptimal if you're working at a busy coffee shop or someplace else with shaky internet!  
+## DH: Also, `readr` has already been loaded, as part of tidyverse
 employed <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-23/employed.csv')
 
 earn <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-23/earn.csv') 
@@ -71,7 +74,7 @@ vis_miss(employed, cluster = TRUE) +
 
 
 #' # Step 5: check your Ns
-
+## DH: Already loaded as part of tidyverse; doesn't seem like you do anything with lubridate; and most importantly we don't want library() calls in the middle of the script! 
 library(lubridate)
 
 nrow(employed)
@@ -79,6 +82,7 @@ nrow(employed)
 min(employed$year, na.rm = TRUE)
 max(employed$year, na.rm = TRUE)
 
+## DH: Anything notable here? 
 
 #' # Step 7: Make a plot 
 employed |>
@@ -91,12 +95,27 @@ employed |>
 ## we will filter out 'women' 'na' 'white" 'Asian", "Black or African American"
 #from industry colmn NOT from race_gender
 
+## DH: You can adjust figure size using chunk options
+
+#' DH: Original version of plot
 employed |>
   filter(race_gender %in% c("Women", "Men")) |>
   filter(!(industry %in% c("Women", "NA", "White"))) |>
   ggplot(aes(x = year, y = employ_n, fill = race_gender)) +
   geom_bar(stat = "identity") +
   facet_wrap(vars(industry), scales = 'free_y')
+
+#' DH: Same plot, using chunk options to modify figure dimensions
+#| fig.width: 12
+#| fig.height: 8
+employed |>
+    filter(race_gender %in% c("Women", "Men")) |>
+    filter(!(industry %in% c("Women", "NA", "White"))) |>
+    ggplot(aes(x = year, y = employ_n, fill = race_gender)) +
+    geom_bar(stat = "identity") +
+    facet_wrap(vars(industry), scales = 'free_y')
+
+
 
 employed |>
   filter(race_gender %in% c("Asian", "Black or African American", 'White')) |>
@@ -124,4 +143,4 @@ employed %>%
   arrange(desc(share)) |> 
   mutate(share = scales::percent(share, accuracy = 1))  
 
-
+## DH: anything notable here? 
